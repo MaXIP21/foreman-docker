@@ -34,4 +34,4 @@ WORKDIR /home/r0ck
 RUN git clone --recursive git://github.com/theforeman/foreman-installer.git -b develop
 
 EXPOSE 22
-CMD ["sudo /usr/sbin/sshd", "-D"]
+CMD ["/usr/sbin/sshd", "-D"]
