@@ -19,19 +19,19 @@ RUN mkdir /root/.ssh/
 # 2. Populate the private key file.
 # 3. Set the required permissions.
 # 4. Add github to our list of known hosts for ssh.
-RUN mkdir -p /root/.ssh/ && \
-    echo "$SSH_KEY" > /root/.ssh/id_rsa && \
-    chmod -R 600 /root/.ssh/
+# RUN mkdir -p /root/.ssh/ && \
+#    echo "$SSH_KEY" > /root/.ssh/id_rsa && \
+#    chmod -R 600 /root/.ssh/
 
-ENV NOTVISIBLE "in users profile"
-RUN echo "export VISIBLE=now" >> /etc/profile
+# ENV NOTVISIBLE "in users profile"
+# RUN echo "export VISIBLE=now" >> /etc/profile
 RUN useradd -ms /bin/bash r0ck
 
 USER r0ck
 WORKDIR /home/r0ck
 
 # Cloning foreman installer 
-RUN git clone --recursive git://github.com/theforeman/foreman-installer.git -b develop
+# RUN git clone --recursive git://github.com/theforeman/foreman-installer.git -b develop
 
 EXPOSE 22
 CMD ["/usr/sbin/sshd", "-D"]
