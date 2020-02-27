@@ -3,7 +3,10 @@ FROM ubuntu:18.04
 
 MAINTAINER Peter Bacsai ""
 
-RUN apt-get update && apt-get install -y openssh-server git nmap
+# Take an SSH key as a build argument.
+ARG SSH_KEY
+
+RUN apt-get update && apt-get install -y openssh-server git nmap sudo 
 RUN mkdir /var/run/sshd
 RUN echo 'root:password' | chpasswd
 RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
@@ -12,12 +15,13 @@ RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/s
 RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
 RUN mkdir /root/.ssh/
 
-# Copy over private key, and set permissions
-# Warning! Anyone who gets their hands on this image will be able
-# to retrieve this private key file from the corresponding image layer
-RUN /usr/bin/ssh-keygen -A
-
-ADD id_rsa /root/.ssh/id_rsa
+# 1. Create the SSH directory.
+# 2. Populate the private key file.
+# 3. Set the required permissions.
+# 4. Add github to our list of known hosts for ssh.
+RUN mkdir -p /root/.ssh/ && \
+    echo "$SSH_KEY" > /root/.ssh/id_rsa && \
+    chmod -R 600 /root/.ssh/
 
 ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
@@ -30,4 +34,4 @@ WORKDIR /home/r0ck
 RUN git clone --recursive git://github.com/theforeman/foreman-installer.git -b develop
 
 EXPOSE 22
-CMD ["/usr/sbin/sshd", "-D"]
+CMD ["sudo /usr/sbin/sshd", "-D"]
