@@ -1,6 +1,8 @@
 FROM ubuntu:18.04
 # install packages
 
+MAINTAINER Peter Bacsai ""
+
 RUN apt-get update && apt-get install -y openssh-server git nmap
 RUN mkdir /var/run/sshd
 RUN echo 'root:password' | chpasswd
