@@ -15,6 +15,8 @@ RUN mkdir /root/.ssh/
 # Copy over private key, and set permissions
 # Warning! Anyone who gets their hands on this image will be able
 # to retrieve this private key file from the corresponding image layer
+RUN /usr/bin/ssh-keygen -A
+
 ADD id_rsa /root/.ssh/id_rsa
 
 ENV NOTVISIBLE "in users profile"
@@ -23,8 +25,6 @@ RUN useradd -ms /bin/bash r0ck
 
 USER r0ck
 WORKDIR /home/r0ck
-
-RUN /usr/bin/ssh-keygen -A
 
 # Cloning foreman installer 
 RUN git clone --recursive git://github.com/theforeman/foreman-installer.git -b develop
