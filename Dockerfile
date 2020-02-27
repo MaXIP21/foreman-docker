@@ -16,7 +16,7 @@ RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so
 
 RUN mkdir -p /root/.ssh/ && \
     echo "$SSH_KEY" > /root/.ssh/id_rsa && \
-    chmod 600 /root/.ssh/"$SSH_KEY"
+    chmod 600 /root/.ssh/id_rsa
 
 # ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
