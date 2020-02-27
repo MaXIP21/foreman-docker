@@ -13,18 +13,17 @@ RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/s
 
 # SSH login fix. Otherwise user is kicked off after login
 RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
-RUN mkdir /root/.ssh/
 
 # 1. Create the SSH directory.
 # 2. Populate the private key file.
 # 3. Set the required permissions.
 # 4. Add github to our list of known hosts for ssh.
-# RUN mkdir -p /root/.ssh/ && \
-#    echo "$SSH_KEY" > /root/.ssh/id_rsa && \
-#    chmod -R 600 /root/.ssh/
+RUN mkdir -p /root/.ssh/ && \
+    echo "$SSH_KEY" > /root/.ssh/id_rsa && \
+    chmod -R 600 /root/.ssh/
 
 # ENV NOTVISIBLE "in users profile"
-# RUN echo "export VISIBLE=now" >> /etc/profile
+RUN echo "export VISIBLE=now" >> /etc/profile
 RUN useradd -ms /bin/bash r0ck
 
 USER r0ck
